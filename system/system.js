@@ -1,35 +1,46 @@
-// const event = require('../event')
-// require('../pilot')
-// require('../manager/manager')
+require('../manager/manager')
+require('../pilot/pilot')
 
-const socket_io =require('socket.io')
-const io = socket_io(process.env.PORT)
+
+
+const io =require( 'socket.io' )( 3001);
+
+
+// io.on('connection',(socket)=>{
+// 	socket.on('robi',(data)=>{
+// 		console.log('hi',data)
+// 	})
+// 	socket.broadcast.emit('fzfz')
+// })
+
+
 const ariline = io.of('/airline')
 
 io.on('connection', (socket) => {
-	socket.on('new-flight', (info) => {
-		io.emit('new-flight', info)
+	socket.on('new-flight', (detailes) => {
+		io.emit('new-flight', detailes)
 		console.log(`fligth{
 			event:'new-flight',
-			time:${info.time},
+			time:${detailes.time},
 			detalies:{
-				ariline:${info.ariline},
-				Pailot Name:${info.pailotName},
-				distination:${info.distination},
-				ID:${info.id},
+				ariline:${detailes.airLine},
+				Pailot Name:${detailes.PailotName},
+				distination:${detailes.distination},
+				ID:${detailes.idFligth},
 			}
 		}`)
 	})
-	socket.on('arrived', (info) => {
-		io.emit('arrived', info)
+
+	socket.on('arrived', (detailes) => {
+		io.emit('arrived', detailes)
 		console.log(`fligth{
 			event:'arrived',
-			time:${info.time},
+			time:${detailes.time},
 			detalies:{
-				ariline:${info.ariline},
-				Pailot Name:${info.pailotName},
-				distination:${info.distination},
-				ID:${info.id},
+				ariline:${detailes.airLine},
+				Pailot Name:${detailes.PailotName},
+				distination:${detailes.distination},
+				ID:${detailes.idFligth},
 			}
 		}`)
 	})
@@ -37,21 +48,32 @@ io.on('connection', (socket) => {
 })
 
 
-
+io.on('took-off',(detailes)=>{
+	console.log(`fligth{
+		event:'took-off',
+		time:${detailes.time},
+		detalies:{
+			airLine:${detailes.airLine},
+			pilot Name:${detailes.PailotName},
+			distination:${detailes.distination},
+			ID:${detailes.idFligth}
+		}
+	}`)
+})
 
 
 
 
 ariline.on('connection', (socket) => {
-	socket.on('took-off', (info) => {
+	socket.on('took-off', (detailes) => {
 		console.log(`fligth{
 			event:'took-off',
-			time:${info.time},
+			time:${detailes.time},
 			detalies:{
-				ariline:${info.ariline},
-				Pailot Name:${info.pailotName},
-				distination:${info.distination},
-				ID:${info.id},
+				ariline:${detailes.airLine},
+				Pailot Name:${detailes.PailotName},
+				distination:${detailes.distination},
+				ID:${detailes.idFligth},
 			}
 		}`)
 	})
