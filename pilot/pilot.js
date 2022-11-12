@@ -1,19 +1,24 @@
-const event = require('../event')
-// require('../manager/manager')
-// require('../system/system')
+// const event =require('../events')
+require('../manager/manager')
+require('../system')
 
 
-const io = require('socket.io-client');
-const socket = io.connect(process.env.PORT)
-const arilineSocket = io.connect(process.env.AIRPORT)
 
-socket.on('new-flight', (info) => {
+const socket = require('socket.io-client')
+const io = socket.connect('http://localhost:3000')
+const airIO = socket.connect('http://localhost:3000/airline')
+
+io.on('new-flight', (detailes) => {
 	setTimeout(() => {
-		console.log(`pilot:flight '${info.id}' took of`)
-		arilineSocket.emit('took-off', info)
-	}, 4000)
-	setTimeout(() => {
-		console.log(`piolt:fligth '${info.id}' arrived`)
-		socket.emit('arrived', info)
-	}, 7000)
+		console.log(`pilot: fligth ${detailes.idFligth} took-off`)
+        airIO.emit('took-off',detailes)
+	},4000)
+
+
+	
+		setTimeout(()=>{
+			console.log(`piolt:fligth ${detailes.idFligth} has arrived`)
+			io.emit('arrived',detailes)
+		
+	},7000)
 })
